@@ -1,0 +1,24 @@
+﻿Imports System.Drawing
+Imports Dotplotter
+
+Friend Class Plot
+    Private ReadOnly a As TokenVector
+    Private ReadOnly b As TokenVector
+    Private ReadOnly bm As Bitmap
+
+    Public Sub New(a As TokenVector, b As TokenVector)
+        Me.a = a
+        Me.b = b
+        bm = New Bitmap(a.Length, b.Length)
+        For i = 0 To a.Length - 1
+            Dim aTok = a.Token(i)
+            For j = 0 To b.Length - 1
+                Dim bTok = b.Token(j)
+                If aTok = bTok Then
+                    bm.SetPixel(i, j, Color.Black)
+                End If
+            Next
+        Next
+    End Sub
+
+End Class

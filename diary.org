@@ -1,0 +1,81 @@
+* Dotplotter
+
+Plot similarity of code.
+
+Basic idea:
+
+- Take two files, x and y.
+
+- Tokenise both
+
+- Create an xy dotplot
+
+- Lay the tokens for x along the x axis and those from y along the y axis.
+
+- In each coordinate place a dot if the x and y tokens are the same.
+
+
+For example, take the last two lines:
+
+x = "Lay the tokens for x along the x axis and those from y along the y axis"
+
+y = "In each coordinate place a dot if the x and y tokens are the same"
+
+
+
+|            | Lay | the | tokens | for | x | along | the | x | axis | and | those | from | y | along | the | y | axis |
+|------------+-----+-----+--------+-----+---+-------+-----+---+------+-----+-------+------+---+-------+-----+---+------|
+| In         |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| each       |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| coordinate |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| place      |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| a          |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| dot        |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| if         |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| the        |     | T   |        |     |   |       | T   |   |      |     |       |      |   |       | T   |   |      |
+| x          |     |     |        |     | T |       |     | T |      |     |       |      |   |       |     |   |      |
+| and        |     |     |        |     |   |       |     |   |      | T   |       |      |   |       |     |   |      |
+| y          |     |     |        |     |   |       |     |   |      |     |       |      | T |       |     | T |      |
+| tokens     |     |     | T      |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| are        |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+| the        |     | T   |        |     |   |       | T   |   |      |     |       |      |   |       | T   |   |      |
+| same       |     |     |        |     |   |       |     |   |      |     |       |      |   |       |     |   |      |
+
+No obvious patterns.
+
+Now try a the second of those two lines versus a modified version:
+
+x = "In every coordinate put a dot if the tokens are the same"
+
+y = "In each coordinate place a dot if the x and y tokens are the same"
+
+|            | In | every | coordinate | put | a | dot | if | the | tokens | are | the | same |
+|------------+----+-------+------------+-----+---+-----+----+-----+--------+-----+-----+------|
+| In         | T  |       |            |     |   |     |    |     |        |     |     |      |
+| each       |    |       |            |     |   |     |    |     |        |     |     |      |
+| coordinate |    |       | T          |     |   |     |    |     |        |     |     |      |
+| place      |    |       |            |     |   |     |    |     |        |     |     |      |
+| a          |    |       |            |     | T |     |    |     |        |     |     |      |
+| dot        |    |       |            |     |   | T   |    |     |        |     |     |      |
+| if         |    |       |            |     |   |     | T  |     |        |     |     |      |
+| the        |    |       |            |     |   |     |    | T   |        |     |     |      |
+| x          |    |       |            |     |   |     |    |     |        |     |     |      |
+| and        |    |       |            |     |   |     |    |     |        |     |     |      |
+| y          |    |       |            |     |   |     |    |     |        |     |     |      |
+| tokens     |    |       |            |     |   |     |    |     | T      |     |     |      |
+| are        |    |       |            |     |   |     |    |     |        | T   |     |      |
+| the        |    |       |            |     |   |     |    |     |        |     | T   |      |
+| same       |    |       |            |     |   |     |    |     |        |     |     | T    |
+
+Now we can see a distinct diagonal pattern.  This shows that the two sequences are very similar.
+
+So, how can this be implemented?  Obviously we cannot simply make a
+matrix like this for any real files because they would be many
+thousands of pixels wide.  Or could we?  How far can we go with a
+naive implementation now that hardware is fast.
+
+So read two files, tokenise using a regular expression for delimiters
+so that we omit all punctuation.
+
+Create a bitmap with pixel dimensions corresponding the the sizes of
+the token lists.
